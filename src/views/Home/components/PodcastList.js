@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import PodcastListItem from './PodcastListItem';
-import { getPodcasts } from '../../../utils/itunes-api'
+import { getPodcasts } from '../../../common/itunes-api'
 
 export default class PodcastList extends Component {
   constructor() {

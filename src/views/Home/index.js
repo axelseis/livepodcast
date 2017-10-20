@@ -17,7 +17,6 @@ export default class Home extends Component {
 
     return (
       <div className="container">
-          <h3>Podcaster</h3>
           <PodcastFilter onUpdate={this.handleFilterUpdate} />
           <PodcastList filter={filter}/>
       </div>

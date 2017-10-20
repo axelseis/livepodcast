@@ -11,7 +11,7 @@ export default class PodcastListItem extends Component {
     const pArtist = this.props.podcast['im:artist'].label;
 
     return (
-      <Link className="podcast" to={'/podcast/myid'}>
+      <Link className="podcast" to={'/podcast/' + pId}>
         <div className="podcast__image">
           <img src={imageURL} />
         </div>

@@ -10,6 +10,7 @@ body {
 	cursor: pointer;
 	display: flex;
 	flex-direction: column;
+	color: #272727;
 	align-items: center;
 	justify-content: space-between;
 	width: 158px;
