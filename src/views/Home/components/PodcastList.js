@@ -19,16 +19,25 @@ export default class PodcastList extends Component {
   }
 
   render() {
-    const {podcasts} = this.state
+    const {podcasts} = this.state;
+    const {filter} = this.props;
     return (
-      <div className="d-flex justify-content-between flex-wrap">
-        {renderPodcasts(podcasts)}
+      <div className="d-flex justify-flex-start flex-wrap">
+        {renderPodcasts(podcasts, filter.toLowerCase())}
       </div>
     );
   }
 }
 
-function renderPodcasts(podcasts) {
+function renderPodcasts(podcasts, filter) {
   return podcasts
+    .filter(podcast => {
+      const pName = podcast["im:name"].label
+      const pArtist = podcast["im:artist"].label
+      
+      return !filter || 
+          (pName && pName.toLowerCase().includes(filter)) ||
+          (pArtist && pArtist.toLowerCase().includes(filter))
+    })
     .map(podcast => <PodcastListItem key={podcast.id.attributes["im:id"]} podcast={podcast} />);
 }
