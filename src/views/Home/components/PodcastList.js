@@ -1,16 +1,16 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import PodcastListItem from './PodcastListItem';
-import {getPodcasts} from '../../../utils/itunes-api'
+import { getPodcasts } from '../../../utils/itunes-api'
 
 export default class PodcastList extends Component {
   constructor() {
     super()
-    this.state = {podcasts: []}
+    this.state = { podcasts: [] }
   }
 
   getPodcasts() {
     getPodcasts().then(podcasts => {
-      this.setState({podcasts});
+      this.setState({ podcasts });
     });
   }
 
@@ -19,8 +19,9 @@ export default class PodcastList extends Component {
   }
 
   render() {
-    const {podcasts} = this.state;
-    const {filter} = this.props;
+    const { podcasts } = this.state;
+    const { filter } = this.props;
+
     return (
       <div className="podcast__list">
         {renderPodcasts(podcasts, filter.toLowerCase())}
@@ -30,14 +31,15 @@ export default class PodcastList extends Component {
 }
 
 function renderPodcasts(podcasts, filter) {
+  
   return podcasts
     .filter(podcast => {
       const pName = podcast["im:name"].label
       const pArtist = podcast["im:artist"].label
-      
-      return !filter || 
-          (pName && pName.toLowerCase().includes(filter)) ||
-          (pArtist && pArtist.toLowerCase().includes(filter))
+
+      return !filter ||
+        (pName && pName.toLowerCase().includes(filter)) ||
+        (pArtist && pArtist.toLowerCase().includes(filter))
     })
     .map(podcast => <PodcastListItem key={podcast.id.attributes["im:id"]} podcast={podcast} />);
 }
