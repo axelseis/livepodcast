@@ -21,9 +21,9 @@ export default class PodcastList extends Component {
   render() {
     const {podcasts} = this.state
     return (
-      <ul className="list-unstyled">
+      <div className="d-flex justify-content-between flex-wrap">
         {renderPodcasts(podcasts)}
-      </ul>
+      </div>
     );
   }
 }

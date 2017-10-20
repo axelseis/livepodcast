@@ -4,3 +4,10 @@
 body {
 	color: rgb(0, 0, 0);
 }
+
+.podcast {
+	width: 100px;
+	height: 200px;
+	margin: 5px;
+	box-shadow: 1px 1px 2px #abaaaa;
+}

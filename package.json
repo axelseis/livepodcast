@@ -15,7 +15,7 @@
   "author": "Axel claver",
   "dependencies": {
     "axios": "0.13.1",
-    "bootstrap": "^3.3.5",
+    "bootstrap": "^4.0.0-beta.2",
     "history": "^3.0.0",
     "react": "15.3.0",
     "react-dom": "15.3.0",
