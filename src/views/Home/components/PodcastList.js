@@ -22,7 +22,7 @@ export default class PodcastList extends Component {
     const {podcasts} = this.state;
     const {filter} = this.props;
     return (
-      <div className="d-flex justify-flex-start flex-wrap">
+      <div className="podcast__list">
         {renderPodcasts(podcasts, filter.toLowerCase())}
       </div>
     );
