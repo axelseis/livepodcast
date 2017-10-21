@@ -8,9 +8,15 @@ export default class Podcast extends Component {
     const { podcastId } = this.props.match.params;
     return (
       <div className="container">
-        <PodcastCard podcastId={podcastId} />
-        <PodcastFeed podcastId={podcastId} />
+        <div className="row livepodcast__detail">
+          <div className="col-sm-4 detail__podcast-card">
+            <PodcastCard podcastId={podcastId} />
+          </div>
+          <div className="col-sm-8 detail__podcast-feed">
+            <PodcastFeed podcastId={podcastId} />
+          </div>
         </div>
+      </div>
     );
   }
 }

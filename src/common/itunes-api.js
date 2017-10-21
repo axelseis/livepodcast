@@ -48,7 +48,7 @@ function getPodcastData(podcastId) {
 
 function getPodcastFeed(podcastId) {
   return getPodcastFeedUrl(podcastId).then(feedUrl => {
-    return axios.get(`http://crossorigin.me/${feedUrl}`).then(response => response);
+    return axios.get(`https://cors-anywhere.herokuapp.com/${feedUrl}`).then(response => response);
   })
 }
 

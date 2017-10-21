@@ -5,10 +5,11 @@ export default class PodcastCard extends Component {
   constructor() {
     super()
     this.state = {
-      data: {
+      data: null, 
+      defaultData: {
         'im:image': [
           {
-            'label': '',
+            'label': '../../src/assets/default-placeholder-300x300.png',
             'attributes': { 'height': '170' }
           }
         ],
@@ -18,15 +19,14 @@ export default class PodcastCard extends Component {
       }
     }
   }
-
+  
   getData() {
     const { podcastId } = this.props;
     
     getPodcastData(podcastId).then(data => {
       console.log('data', data)
-      if (data) {
-        this.setState({ data });
-      }
+      const tempData = data || this.defaultData;
+        this.setState({ 'data' : tempData });
     });
   }
 
@@ -35,22 +35,22 @@ export default class PodcastCard extends Component {
   }
 
   render() {
-    const { data } = this.state;
+    const data = this.state.data || this.state.defaultData;
 
     return (
-      <div className="podcastCard">
-        <img className="podcastCard__image"
+      <div className="podcast-card">
+        <img className="podcast-card__image"
           src={data['im:image'].find(image => {
             return image.attributes.height === '170'
           }).label}
         />
-        <div className="podcastCard__name">
+        <div className="podcast-card__name">
           {data['im:name'].label}
         </div>
-        <div className="podcastCard__artist">
+        <div className="podcast-card__artist">
           {data['im:artist'].label}
         </div>
-        <div className="podcastCard__description">
+        <div className="podcast-card__description">
           {(data.summary||{'label': 'no description'}).label}
         </div>
       </div>

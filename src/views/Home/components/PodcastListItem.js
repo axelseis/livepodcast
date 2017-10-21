@@ -11,14 +11,14 @@ export default class PodcastListItem extends Component {
     const pArtist = this.props.podcast['im:artist'].label;
 
     return (
-      <Link className="podcast" to={'/podcast/' + pId}>
-        <div className="podcast__image">
+      <Link className="podcast-list-item" to={'/podcast/' + pId}>
+        <div className="podcast-list-item__image">
           <img src={imageURL} />
         </div>
-        <div className="podcast__name">
+        <div className="podcast-list-item__name">
           {pName}
         </div>
-        <div className="podcast__author">
+        <div className="podcast-list-item__author">
           Author: {pArtist}
         </div>
       </Link>

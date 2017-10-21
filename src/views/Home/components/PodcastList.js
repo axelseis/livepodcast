@@ -23,7 +23,7 @@ export default class PodcastList extends Component {
     const { filter } = this.props;
 
     return (
-      <div className="podcast__list">
+      <div className="podcast-list">
         {renderPodcasts(podcasts, filter.toLowerCase())}
       </div>
     );
