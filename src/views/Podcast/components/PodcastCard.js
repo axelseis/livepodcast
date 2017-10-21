@@ -51,7 +51,7 @@ export default class PodcastCard extends Component {
           {data['im:artist'].label}
         </div>
         <div className="podcastCard__description">
-          {data.summary.label}
+          {(data.summary||{'label': 'no description'}).label}
         </div>
       </div>
     );

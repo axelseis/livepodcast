@@ -40,14 +40,15 @@ body {
     text-transform: uppercase;
     line-height: 13px;
     font-size: 0.8em;
-    max-height: 54px;
+    max-height: 50px;
     overflow: hidden;
     font-weight: 600;
-    padding: 10px 0;
+    margin: 10px 0;
 }
 
 .podcast__author {
     font-size: 0.7em;
+    line-height: 1.2em;
     /* position: absolute; */
     /* bottom: 10px; */
     /* justify-self: unset; */

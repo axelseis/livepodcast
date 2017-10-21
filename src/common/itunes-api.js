@@ -27,8 +27,15 @@ function getPodcasts() {
 }
 
 function setCachedPodcastFeedUrl(podcastId,feedUrl){
+  const cachedPodcasts = JSON.parse(localStorage.getItem('podcastsFeed') || '{"timestamp":0,"entry":[]}');
+  const timestamp = cachedPodcasts.timestamp;
+  const entry = cachedPodcasts.entry;
   
-  //localStorage.setItem('podcastsFeed', JSON.stringify({ entry, timestamp }));
+  entry.find(
+    podcast => podcast.id.attributes['im:id'] === podcastId
+  ).__feedUrl = feedUrl;
+  
+  localStorage.setItem('podcastsFeed', JSON.stringify({ entry, timestamp }));
 }
 
 function getPodcastData(podcastId) {
@@ -44,11 +51,11 @@ function getPodcastFeed(podcastId) {
     return axios.get(`http://crossorigin.me/${feedUrl}`).then(response => response);
   })
 }
-  function getPodcastFeedUrl(podcastId) {
-    const url = `${BASE_URL}/lookup?id=${podcastId}`;
+
+function getPodcastFeedUrl(podcastId) {
+  const url = `${BASE_URL}/lookup?id=${podcastId}`;
 
   return getPodcastData(podcastId).then(podcastData => {
-    console.log('podcastData', podcastData)
     if(podcastData.__feedUrl) {
       return podcastData.__feedUrl
     }
