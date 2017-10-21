@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { getPodcastFeed } from '../../../common/itunes-api'
+import PodcastFeedItem from './PodcastFeedItem';
 
 export default class PodcastFeed extends Component {
   constructor() {
@@ -25,22 +26,13 @@ export default class PodcastFeed extends Component {
 
   render() {
     const { feedElements } = this.state;
-
+    const { podcastId } = this.props;
+    
     return (
       <div className="podcast-feed">
         {
           feedElements.map((element, index) =>
-            <div key={index} className="podcast-feed__item">
-              <div className="podcast-feed__item__title">
-                {element.title}
-              </div>
-              <div className="podcast-feed__item__date">
-                {element.date}
-              </div>
-              <div className="podcast-feed__item__duration">
-                {element.duration}
-              </div>
-            </div>
+            <PodcastFeedItem key={index} element={element} podcastId={podcastId} />
           )
         }
       </div>

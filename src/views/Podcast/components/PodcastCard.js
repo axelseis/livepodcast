@@ -24,7 +24,6 @@ export default class PodcastCard extends Component {
     const { podcastId } = this.props;
     
     getPodcastData(podcastId).then(data => {
-      console.log('data', data)
       const tempData = data || this.defaultData;
         this.setState({ 'data' : tempData });
     });

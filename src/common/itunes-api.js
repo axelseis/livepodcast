@@ -47,10 +47,23 @@ function getPodcastData(podcastId) {
 }
 
 function getPodcastFeed(podcastId) {
-  const cleanHTML = (htmlText = '') => (htmlText.innerHTML || htmlText.innerHTML == '' ? htmlText.innerHTML : htmlText)
-  .replace(/<span[^>]*>(.*?)<\/span[^>]*>/g,"")
-  .replace( /&lt;!\[CDATA\[(.*?)\]\]&gt;/g, '$1');
+  const getInnerHTML = (tempEl = '') => tempEl.innerHTML || tempEl.innerHTML == '' ? tempEl.innerHTML : tempEl;
+  const getFirstChild = (tempEl) => tempEl && tempEl.children ? tempEl.children[0] : '';
 
+  const cleanHTML = (tempEl) => getInnerHTML(tempEl)
+    .replace(/<span[^>]*>(.*?)<\/span[^>]*>/g,"")
+    .replace( /&lt;!\[CDATA\[(.*?)\]\]&gt;/g, '$1');
+
+  const getfeedUrl = (feedEl) => {
+    const tempEl = feedEl || document.createElement('div');
+    return tempEl.getAttribute('url') || tempEl.getAttribute('href') || '';
+  };
+
+  const formatDate = (dateStr,format) => {
+    const momDate = moment(getInnerHTML(dateStr))
+    return momDate.isValid() ? momDate.format(format) : '-';
+  }
+  
   return getPodcastData(podcastId).then(podcastData => {
       if(podcastData.__feed) {
         console.log('CACHE ¡¡¡¡ podcastData.__feed', podcastData.__feed)
@@ -74,24 +87,24 @@ function getPodcastFeed(podcastId) {
             return ({
               title: cleanHTML(
                 isRSSFeed ? element.getElementsByTagName('title')[0]
-                : element.getElementsByClassName('itemtitle')[0].children[0]
+                : getFirstChild(element.getElementsByClassName('itemtitle')[0])
               ),
-              date: cleanHTML(
+              date: cleanHTML(formatDate(
                 isRSSFeed ? element.getElementsByTagName('pubdate')[0]
                 : element.getElementsByClassName('itemposttime')[0]
-              ),
-              duration: cleanHTML(
+              ,'DD/MM/YYYY')),
+              duration: cleanHTML(formatDate(
                 isRSSFeed ? element.getElementsByTagName('itunes:duration')[0]
                 : '-'
-              ),
-              url: cleanHTML(
-                isRSSFeed ? element.getElementsByTagName('enclosure')[0].getAttribute('url')
-                : element.getElementsByClassName('podcastmediaenclosure')[0].children[0].getAttribute('href')
-              )
+              ,'HH:MM:SS')),
+              url: cleanHTML(getfeedUrl(
+                isRSSFeed ? element.getElementsByTagName('enclosure')[0]
+                : getFirstChild(element.getElementsByClassName('podcastmediaenclosure')[0])
+              ))
             })
           })
           
-          console.log('feedElements', feedElements)
+          //console.log('feedElements', feedElements)
           setCachedPodcastData(podcastId,feedElements,'__feed')
           return feedElements;
         });
