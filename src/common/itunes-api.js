@@ -3,13 +3,13 @@ import moment from 'moment';
 
 const BASE_URL = 'https://itunes.apple.com';
 
-export {getPodcasts, getPodcastData};
+export { getPodcasts, getPodcastData, getPodcastFeed };
 
 function getPodcasts() {
-  const url =  `${BASE_URL}/us/rss/toppodcasts/limit=100/genre=1310/json`;
-  const cachedPodcasts = JSON.parse(localStorage.getItem('podcastsFeed')||'{"timestamp":0}');
-  
-  if(moment().diff(moment(cachedPodcasts.timestamp),'days') === 0){
+  const url = `${BASE_URL}/us/rss/toppodcasts/limit=100/genre=1310/json`;
+  const cachedPodcasts = JSON.parse(localStorage.getItem('podcastsFeed') || '{"timestamp":0,"entry":[]}');;
+
+  if (moment().diff(moment(cachedPodcasts.timestamp), 'days') === 0) {
     return new Promise((resolve) => {
       resolve(cachedPodcasts.entry)
     })
@@ -19,18 +19,49 @@ function getPodcasts() {
       const entry = response.data.feed.entry;
       const timestamp = new Date().getTime();
       
-      localStorage.setItem('podcastsFeed', JSON.stringify({entry,timestamp}));
+      localStorage.setItem('podcastsFeed', JSON.stringify({ entry, timestamp }));
       return entry
     },
     error => console.log('error', error)
   );
 }
 
+function setCachedPodcastFeedUrl(podcastId,feedUrl){
+  
+  //localStorage.setItem('podcastsFeed', JSON.stringify({ entry, timestamp }));
+}
+
 function getPodcastData(podcastId) {
-  const url =  `${BASE_URL}/lookup?id=${podcastId}`;
-  return axios.get(url).then(
-    response => response.data.results[0],
-    error => console.log('error', error)
-  );
+  return getPodcasts().then(
+    podcasts => podcasts.find(
+      podcast => podcast.id.attributes['im:id'] === podcastId
+    )
+  )
+}
+
+function getPodcastFeed(podcastId) {
+  return getPodcastFeedUrl(podcastId).then(feedUrl => {
+    return axios.get(`http://crossorigin.me/${feedUrl}`).then(response => response);
+  })
+}
+  function getPodcastFeedUrl(podcastId) {
+    const url = `${BASE_URL}/lookup?id=${podcastId}`;
+
+  return getPodcastData(podcastId).then(podcastData => {
+    console.log('podcastData', podcastData)
+    if(podcastData.__feedUrl) {
+      return podcastData.__feedUrl
+    }
+    else {
+      return axios.get(url).then(
+        response => {
+          const feedUrl = response.data.results[0].feedUrl;
+          setCachedPodcastFeedUrl(podcastId,feedUrl)
+          return feedUrl;
+        },
+        error => console.log('error', error)
+      );
+    }
+  })
 }
 
