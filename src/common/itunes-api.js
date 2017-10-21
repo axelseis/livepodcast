@@ -72,12 +72,22 @@ function getPodcastFeed(podcastId) {
           .map(element => {
             console.log('element', element)
             return ({
-              title: cleanHTML(isRSSFeed ? element.getElementsByTagName('title')[0]
-                    : element.getElementsByClassName('itemtitle')[0].children[0]),
-              date: cleanHTML(isRSSFeed ? element.getElementsByTagName('pubdate')[0]
-                    : element.getElementsByClassName('itemposttime')[0]),
-              duration: cleanHTML(isRSSFeed ? element.getElementsByTagName('itunes:duration')[0]
-                    : '-')
+              title: cleanHTML(
+                isRSSFeed ? element.getElementsByTagName('title')[0]
+                : element.getElementsByClassName('itemtitle')[0].children[0]
+              ),
+              date: cleanHTML(
+                isRSSFeed ? element.getElementsByTagName('pubdate')[0]
+                : element.getElementsByClassName('itemposttime')[0]
+              ),
+              duration: cleanHTML(
+                isRSSFeed ? element.getElementsByTagName('itunes:duration')[0]
+                : '-'
+              ),
+              url: cleanHTML(
+                isRSSFeed ? element.getElementsByTagName('enclosure')[0].getAttribute('url')
+                : element.getElementsByClassName('podcastmediaenclosure')[0].children[0].getAttribute('href')
+              )
             })
           })
           
