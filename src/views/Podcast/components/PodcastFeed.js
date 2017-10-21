@@ -4,30 +4,15 @@ import { getPodcastFeed } from '../../../common/itunes-api'
 export default class PodcastFeed extends Component {
   constructor() {
     super()
-    this.state = { feedElements: [] }
-  }
-
+    this.state = { 
+      feedElements: [] 
+    }  
+  }  
+  
   getFeed() {
     const { podcastId } = this.props;
-
-    getPodcastFeed(podcastId).then(feed => {
-      const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = feed.data;
-
-      const feedElements = Array.from(
-        tempDiv.getElementsByTagName('item') ||
-        tempDiv.getElementsByClassName('regularitem')
-      ).map(element => {
-        console.log('element', element)
-        return ({
-          title: element.getElementsByTagName('title')[0].innerHTML,
-          date: element.getElementsByTagName('pubdate')[0].innerHTML,
-          duration: element.getElementsByTagName('itunes:duration')[0].innerHTML
-        })
-      })
-      console.log('feedElements', feedElements)
-
-      //div/rss/channel/item[1]/title
+    
+    getPodcastFeed(podcastId).then(feedElements => {
       if (feedElements) {
         this.setState({ feedElements });
       }
