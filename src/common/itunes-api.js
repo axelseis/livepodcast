@@ -61,7 +61,7 @@ function getPodcastFeed(podcastId) {
 
   const formatDate = (dateStr,format) => {
     const momDate = moment(getInnerHTML(dateStr))
-    return momDate.isValid() ? momDate.format(format) : '-';
+    return momDate.isValid() ? format === 'unix' ? momDate.unix() : momDate.format(format) : '-';
   }
   
   return getPodcastData(podcastId).then(podcastData => {
@@ -85,18 +85,22 @@ function getPodcastFeed(podcastId) {
           .map(element => {
             console.log('element', element)
             return ({
+              id: formatDate(
+                isRSSFeed ? element.getElementsByTagName('pubdate')[0]
+                : element.getElementsByClassName('itemposttime')[0]
+              ,'unix'),
               title: cleanHTML(
                 isRSSFeed ? element.getElementsByTagName('title')[0]
                 : getFirstChild(element.getElementsByClassName('itemtitle')[0])
               ),
-              date: cleanHTML(formatDate(
+              date: formatDate(
                 isRSSFeed ? element.getElementsByTagName('pubdate')[0]
                 : element.getElementsByClassName('itemposttime')[0]
-              ,'DD/MM/YYYY')),
-              duration: cleanHTML(formatDate(
+              ,'DD/MM/YYYY'),
+              duration: formatDate(
                 isRSSFeed ? element.getElementsByTagName('itunes:duration')[0]
                 : '-'
-              ,'HH:MM:SS')),
+              ,'HH:MM:SS'),
               url: cleanHTML(getfeedUrl(
                 isRSSFeed ? element.getElementsByTagName('enclosure')[0]
                 : getFirstChild(element.getElementsByClassName('podcastmediaenclosure')[0])

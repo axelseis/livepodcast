@@ -16,7 +16,7 @@ export default class Home extends Component {
     const { filter } = this.state;
 
     return (
-      <div className="container livepodcast__home">
+      <div className="livepodcast__home">
         <div className="home__podcast-filter">
           <PodcastFilter onUpdate={this.handleFilterUpdate} />
         </div>
