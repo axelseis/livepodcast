@@ -4,7 +4,7 @@ import {Link } from 'react-router-dom';
 export default class PodcastListItem extends Component {
   render() {
     const imageURL= this.props.podcast['im:image'].find(image => {
-      return image.attributes.height === '60'
+      return image.attributes.height === '170'
     }).label;
     const pId= this.props.podcast.id.attributes["im:id"];
     const pName = this.props.podcast['im:name'].label;

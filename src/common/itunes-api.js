@@ -3,7 +3,7 @@ import moment from 'moment';
 
 const BASE_URL = 'https://itunes.apple.com';
 
-export { getPodcasts, getPodcastData, getPodcastFeed };
+export { getPodcasts, getPodcastData, getPodcastFeed, getPodcastAudioFile };
 
 function getPodcasts() {
   const url = `${BASE_URL}/us/rss/toppodcasts/limit=100/genre=1310/json`;
@@ -51,8 +51,9 @@ function getPodcastFeed(podcastId) {
   const getFirstChild = (tempEl) => tempEl && tempEl.children ? tempEl.children[0] : '';
 
   const cleanHTML = (tempEl) => getInnerHTML(tempEl)
-    .replace(/<span[^>]*>(.*?)<\/span[^>]*>/g,"")
-    .replace( /&lt;!\[CDATA\[(.*?)\]\]&gt;/g, '$1');
+  .replace(/&amp;/g,"&")
+  .replace(/<span[^>]*>(.*?)<\/span[^>]*>/g,"")
+  .replace( /&lt;!\[CDATA\[(.*?)\]\]&gt;/g, '$1');
 
   const getfeedUrl = (feedEl) => {
     const tempEl = feedEl || document.createElement('div');
@@ -83,12 +84,16 @@ function getPodcastFeed(podcastId) {
             tempDiv.getElementsByClassName('regularitem')
           )
           .map(element => {
-            console.log('element', element)
+            //console.log('element', element)
             return ({
               id: formatDate(
                 isRSSFeed ? element.getElementsByTagName('pubdate')[0]
                 : element.getElementsByClassName('itemposttime')[0]
               ,'unix'),
+              title: cleanHTML(
+                isRSSFeed ? element.getElementsByTagName('title')[0]
+                : getFirstChild(element.getElementsByClassName('itemtitle')[0])
+              ),
               title: cleanHTML(
                 isRSSFeed ? element.getElementsByTagName('title')[0]
                 : getFirstChild(element.getElementsByClassName('itemtitle')[0])
@@ -134,6 +139,17 @@ function getPodcastFeedUrl(podcastId) {
         error => console.log('error', error)
       );
     }
+  })
+}
+
+function getPodcastAudioFile(podcastId, episodeId) {
+  return getPodcastFeed(podcastId).then(feed => {
+    const episode = feed.find(episode => {
+      console.log('episode.id == episodeId', episode.id == episodeId)
+      return episode.id*1 == episodeId*1
+    })
+    console.log('episode', episode.url)
+    return episode.url;
   })
 }
 

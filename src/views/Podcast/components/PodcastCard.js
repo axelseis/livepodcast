@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { getPodcastData } from '../../../common/itunes-api'
+import { Link } from 'react-router-dom';
 
 export default class PodcastCard extends Component {
   constructor() {
@@ -34,10 +35,11 @@ export default class PodcastCard extends Component {
   }
 
   render() {
+    const { podcastId } = this.props;
     const data = this.state.data || this.state.defaultData;
 
     return (
-      <div className="podcast-card">
+      <Link className="podcast-card" to={`/podcast/${podcastId}`}>
         <img className="podcast-card__image"
           src={data['im:image'].find(image => {
             return image.attributes.height === '170'
@@ -52,7 +54,7 @@ export default class PodcastCard extends Component {
         <div className="podcast-card__description">
           {(data.summary||{'label': 'no description'}).label}
         </div>
-      </div>
+      </Link>
     );
   }
 }

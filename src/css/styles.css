@@ -15,18 +15,18 @@ body {
 	justify-content: space-between;
 	width: 158px;
 	/* height: 170px; */
-	margin: 7px;
+	margin: 85px 7px 7px;
 	box-shadow: 1px 1px 2px #abaaaa;
 	text-align: center;
-	padding: 10px;
+	padding: 0 10px 10px;
 	background-color: white;
 }
 
 .podcast-list-item__image {
-    /* margin: 10px auto; */
+    margin-top: -50px;
     border-radius: 50%;
-    width: 60px;
-    height: 60px;
+    width: 90px;
+    height: 90px;
     overflow: hidden;
     background-color: black;
 }
@@ -100,4 +100,21 @@ img.podcast-card__image {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.podcast-list-item__image>img {
+    width: 100%;
+}
+
+.col-sm-4.podcast__podcast-card {
+    color: black;
+}
+
+a.podcast-card:hover {
+    color: black;
+    text-decoration: none;
+}
+
+a.podcast-card {
+    color: black;
 }

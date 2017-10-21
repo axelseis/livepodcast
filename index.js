@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter as Router,Route} from 'react-router-dom';
+import {BrowserRouter as Router,Route,Switch} from 'react-router-dom';
 import Header from './src/common/Header.js';
 import Home from './src/views/Home';
 import Podcast from './src/views/Podcast';
@@ -12,7 +12,10 @@ ReactDOM.render(
         <div className="livepodcast container">
             <Route path="/" component={Header} />
             <Route exact path="/" component={Home} />
-            <Route path="/podcast/:podcastId" component={Podcast} />
+            <Switch>
+                <Route path="/podcast/:podcastId/episode/:episodeId" component={Podcast} />
+                <Route path="/podcast/:podcastId" component={Podcast} />
+            </Switch>
         </div>
     </Router>,
     document.getElementById('container')
