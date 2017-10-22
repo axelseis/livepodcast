@@ -5,7 +5,12 @@ import { getPodcasts } from '../../../common/itunes-api'
 export default class PodcastList extends Component {
   constructor() {
     super()
-    this.state = { podcasts: [] }
+
+    this.filteredNumber = 0;
+
+    this.state = { 
+      podcasts: [],
+    }
   }
 
   getPodcasts() {
@@ -15,17 +20,29 @@ export default class PodcastList extends Component {
   }
 
   componentWillMount() {
-    this.getPodcasts();
+    this.getPodcasts(); 
     window.scrollTo(0, 0);
+  }
+
+  shouldComponentUpdate(nextProps){
+    return this.props.filter==='' && !this.filteredNumber 
+            || this.props.filter !== nextProps.filter;
+  }
+
+  componentDidUpdate(){
+    this.props.onUpdate(this.filteredNumber)
   }
 
   render() {
     const { podcasts } = this.state;
     const { filter } = this.props;
 
+    const filteredList = renderPodcasts(podcasts, filter.toLowerCase());
+    this.filteredNumber = filteredList.length;
+
     return (
       <div className="podcast-list">
-        {renderPodcasts(podcasts, filter.toLowerCase())}
+        {filteredList}
       </div>
     );
   }

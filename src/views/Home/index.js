@@ -5,23 +5,31 @@ import PodcastList from './components/PodcastList'
 export default class Home extends Component {
   constructor() {
     super()
-    this.state = { filter: '' }
+    this.state = {
+      filter: '',
+      podcastNumber: 0
+    }
   }
 
-  handleFilterUpdate = (filter) => {
+  onUpdatePodcastFilter = (filter) => {
     this.setState({ filter })
   };
 
+  onUpdatePodcastList = (podcastNumber) => {
+    this.setState({podcastNumber})
+  };
+
   render() {
-    const { filter } = this.state;
+    const { filter, podcastNumber } = this.state;
 
     return (
       <div className="livepodcast__home">
+
         <div className="home__podcast-filter">
-          <PodcastFilter onUpdate={this.handleFilterUpdate} />
+          <PodcastFilter number={podcastNumber} onUpdate={this.onUpdatePodcastFilter} />
         </div>
         <div className="home__podcast-list">
-          <PodcastList filter={filter} />
+          <PodcastList onUpdate={this.onUpdatePodcastList} filter={filter} />
         </div>
       </div>
     );

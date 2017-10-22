@@ -111,7 +111,6 @@ function getPodcastFeed(podcastId) {
   
   return getPodcastData(podcastId).then(podcastData => {
     if(podcastData.__feed) {
-      console.log('CACHE ¡¡¡¡ podcastData.__feed', podcastData.__feed)
       return podcastData.__feed
     }
     else {
@@ -125,14 +124,12 @@ function getPodcastFeed(podcastId) {
           //Array.from(tempDiv.getElementsByTagName('img')).forEach(el => el.setAttribute('src',''))
 
           const isRSSFeed = !!tempDiv.getElementsByTagName('rss').length
-          console.log('isRSSFeed', isRSSFeed)
           
           const feedElements = Array.from(  
             isRSSFeed ? tempDiv.getElementsByTagName('item') :
             tempDiv.getElementsByClassName('regularitem')
           )
           .map((element,index,arr) => {
-            //console.log('element', element)
             return ({
               id: arr.length - index,
               title: cleanHTML(

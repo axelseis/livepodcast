@@ -27,7 +27,8 @@ export default class PodcastCard extends Component {
     getPodcastData(podcastId).then(data => {
       const tempData = data || this.defaultData;
         this.setState({ 'data' : tempData });
-    });
+        window.scrollTo(0, 0);
+      });
   }
 
   componentWillMount() {

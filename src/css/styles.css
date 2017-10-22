@@ -250,3 +250,19 @@ audio {
         -webkit-transform: scale(1.0);
     }
 }
+
+.home__podcast-filter {
+    width: 40%;
+    min-width: 250px;
+    max-width: 500px;
+    margin-left: auto;
+}
+
+.podcast-filter {
+    display: flex;
+    align-items: center;
+}
+
+.podcast-filter__input {
+    margin-left: 10px;
+}
