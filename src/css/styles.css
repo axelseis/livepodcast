@@ -146,3 +146,11 @@ audio.podcast-player__audio {
 .row.livepodcast__podcast {
     align-items: flex-start;
 }
+
+.podcast-player__description {
+    overflow: hidden;
+}
+
+.podcast-player__description>* {
+    max-width: 100%;
+}

@@ -57,9 +57,12 @@ function getPodcastFeed(podcastId) {
 
   const cleanHTML = (tempEl) => getInnerHTML(tempEl)
   .replace(/&amp;/g,"&")
+  .replace(/&lt;/g,"<")
+  .replace(/&gt;/g,">")
   .replace(/<span[^>]*>(.*?)<\/span[^>]*>/g,"")
-  .replace( /&lt;!\[CDATA\[(.*?)\]\]&gt;/g, '$1')
-  .replace( /<!--\[CDATA\[(.*?)\]\](-->|&gt;)/g, '$1')
+  .replace(/<img(.*?)>/g,"")
+  .replace( /<!\[CDATA\[(.*?)\]\]>/g, '$1')
+  .replace( /<!--\[CDATA\[(.*?)\]\](-->|>)/g, '$1')
   
   const getfeedUrl = (feedEl) => {
     const tempEl = feedEl || document.createElement('div');
@@ -92,7 +95,7 @@ function getPodcastFeed(podcastId) {
             tempDiv.getElementsByClassName('regularitem')
           )
           .map((element,index,arr) => {
-            console.log('element', element)
+            //console.log('element', element)
             return ({
               id: arr.length - index,
               title: cleanHTML(
@@ -100,8 +103,9 @@ function getPodcastFeed(podcastId) {
                 : getFirstChild(element.getElementsByClassName('itemtitle')[0])
               ),
               description: cleanHTML(
-                isRSSFeed ? element.getElementsByTagName('description')[0]
-                : getFirstChild(element.getElementsByClassName('itemtitle')[0])
+                isRSSFeed ? element.getElementsByTagName('itunes:summary')[0] ||
+                element.getElementsByTagName('description')[0]
+                : element.getElementsByClassName('itemcontent')[0]
               ),
               date: formatDate(
                 isRSSFeed ? element.getElementsByTagName('pubdate')[0]

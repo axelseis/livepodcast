@@ -24,7 +24,8 @@ export default class PodcastPlayer extends Component {
 
     return (
         <div className="podcast__podcast-player">
-          <div className="podcast-player__description" dangerouslySetInnerHTML={{__html:episodeData.description}}>
+          <div className="podcast-player__description" 
+            dangerouslySetInnerHTML={{__html:episodeData.description}}>
           </div>
           <audio className="podcast-player__audio" controls autoPlay>
             <source src={episodeData.url} type="audio/mp3"/>
