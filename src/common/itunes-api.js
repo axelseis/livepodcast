@@ -2,8 +2,31 @@ import axios from 'axios';
 import moment from 'moment';
 
 const BASE_URL = 'https://itunes.apple.com';
+const _loadingState = [];
+let _loadingHandler = {};
 
-export { getPodcasts, getPodcastData, getPodcastFeed, getEpisodeData };
+export { 
+  getPodcasts, 
+  getPodcastData, 
+  getPodcastFeed, 
+  getEpisodeData,
+  setLoadingHandler
+};
+
+function setLoadingHandler(handler){
+  _loadingHandler = handler;
+}
+
+function setLoadingState(state){
+  if(state){
+    _loadingState.push(state);
+  }
+  else {
+    _loadingState.pop();
+  }
+
+  _loadingHandler(!!_loadingState.length)
+}
 
 function getPodcasts() {
   const url = `${BASE_URL}/us/rss/toppodcasts/limit=100/genre=1310/json`;  
@@ -16,16 +39,27 @@ function getPodcasts() {
       resolve(cachedPodcasts.entry)
     })
   }
-  else return axios.get(url).then(
-    response => {
-      const entry = response.data.feed.entry;
-      const timestamp = new Date().getTime();
-      
-      localStorage.setItem('podcastsFeed', JSON.stringify({ entry, timestamp }));
-      return entry
-    },
-    error => console.log('error', error)
-  );
+  else {
+    setLoadingState(true)
+
+    return (
+      axios.get(url).then(
+        response => {
+          const entry = response.data.feed.entry;
+          const timestamp = new Date().getTime();
+          
+          localStorage.setItem('podcastsFeed', JSON.stringify({ entry, timestamp }));
+          
+          setLoadingState(false)
+          return entry
+        },
+        error => {
+          console.log('error', error)
+          setLoadingState(false)
+        }
+      )
+    ) 
+  }
 }
 
 function setCachedPodcastData(podcastId,feedUrl,dataId){
@@ -60,9 +94,10 @@ function getPodcastFeed(podcastId) {
   .replace(/&lt;/g,"<")
   .replace(/&gt;/g,">")
   .replace(/<span[^>]*>(.*?)<\/span[^>]*>/g,"")
-  .replace(/<img(.*?)>/g,"")
+  .replace(/<p[^>]*>(''|&nbsp;)<\/p[^>]*>/g,"")
   .replace( /<!\[CDATA\[(.*?)\]\]>/g, '$1')
   .replace( /<!--\[CDATA\[(.*?)\]\](-->|>)/g, '$1')
+  .replace( /\]\]>/g, '')
   
   const getfeedUrl = (feedEl) => {
     const tempEl = feedEl || document.createElement('div');
@@ -75,17 +110,19 @@ function getPodcastFeed(podcastId) {
   }
   
   return getPodcastData(podcastId).then(podcastData => {
-      if(podcastData.__feed) {
-        console.log('CACHE ¡¡¡¡ podcastData.__feed', podcastData.__feed)
+    if(podcastData.__feed) {
+      console.log('CACHE ¡¡¡¡ podcastData.__feed', podcastData.__feed)
       return podcastData.__feed
     }
     else {
+      setLoadingState(true)
+      
       return getPodcastFeedUrl(podcastId).then(feedUrl => {
         return axios.get(`https://cors-anywhere.herokuapp.com/${feedUrl}`).then(feedData => {
           const tempDiv = document.createElement('div');
           
           tempDiv.innerHTML = feedData.data;
-          Array.from(tempDiv.getElementsByTagName('img')).forEach(el => el.setAttribute('src',''))
+          //Array.from(tempDiv.getElementsByTagName('img')).forEach(el => el.setAttribute('src',''))
 
           const isRSSFeed = !!tempDiv.getElementsByTagName('rss').length
           console.log('isRSSFeed', isRSSFeed)
@@ -123,7 +160,9 @@ function getPodcastFeed(podcastId) {
           })
           
           //console.log('feedElements', feedElements)
+          
           setCachedPodcastData(podcastId,feedElements,'__feed')
+          setLoadingState(false)
           return feedElements;
         });
       })
@@ -139,13 +178,21 @@ function getPodcastFeedUrl(podcastId) {
       return podcastData.__feedUrl
     }
     else {
+      setLoadingState(true)
+      
       return axios.get(url).then(
         response => {
           const feedUrl = response.data.results[0].feedUrl;
+
           setCachedPodcastData(podcastId,feedUrl,'')
+          setLoadingState(false)          
+
           return feedUrl;
         },
-        error => console.log('error', error)
+        error => {
+          console.log('error', error)
+          setLoadingState(false)
+        }          
       );
     }
   })

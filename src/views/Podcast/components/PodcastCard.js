@@ -45,14 +45,17 @@ export default class PodcastCard extends Component {
             return image.attributes.height === '170'
           }).label}
         />
-        <div className="podcast-card__name">
-          {data['im:name'].label}
-        </div>
-        <div className="podcast-card__artist">
-          {data['im:artist'].label}
-        </div>
-        <div className="podcast-card__description">
-          {(data.summary||{'label': 'no description'}).label}
+        <div className="podcast-card__info">
+          <div className="podcast-card__name">
+            {data['im:name'].label}
+          </div>
+          <div className="podcast-card__artist">
+            by {data['im:artist'].label}
+          </div>
+          <div className="podcast-card__description">
+            <b>Description:</b><br/>
+            {(data.summary||{'label': 'no description'}).label}
+          </div>
         </div>
       </Link>
     );

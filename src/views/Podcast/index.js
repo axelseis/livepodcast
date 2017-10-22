@@ -7,6 +7,7 @@ export default class Podcast extends Component {
 
   render() {
     const { podcastId, episodeId } = this.props.match.params;
+    
     return (
       <div className="row livepodcast__podcast">
         <div className="col-sm-4 podcast__podcast-card">
