@@ -5,14 +5,14 @@ import PodcastFeedItem from './PodcastFeedItem';
 export default class PodcastFeed extends Component {
   constructor() {
     super()
-    this.state = { 
-      feedElements: [] 
-    }  
-  }  
-  
+    this.state = {
+      feedElements: []
+    }
+  }
+
   getFeed() {
     const { podcastId } = this.props;
-    
+
     getPodcastFeed(podcastId).then(feedElements => {
       if (feedElements) {
         this.setState({ feedElements });
@@ -27,14 +27,24 @@ export default class PodcastFeed extends Component {
   render() {
     const { feedElements } = this.state;
     const { podcastId } = this.props;
-    
+
     return (
       <div className="podcast-feed">
-        {
-          feedElements.map((element, index) =>
-            <PodcastFeedItem key={index} element={element} podcastId={podcastId} />
-          )
-        }
+        <h5 className="podcast-feed__header">
+          Episodes: {feedElements.length}
+        </h5>
+        <div className="podcast-feed__list">
+          <div className="podcast-feed__list__header">
+            <div className="podcast-feed__item__title">Title</div>
+            <div className="podcast-feed__item__date">Date</div>
+            <div className="podcast-feed__item__duration">Duration</div>
+          </div>
+          {
+            feedElements.map((element, index) =>
+              <PodcastFeedItem key={index} element={element} podcastId={podcastId} />
+            )
+          }
+        </div>
       </div>
     );
   }
