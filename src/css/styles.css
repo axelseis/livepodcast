@@ -285,3 +285,7 @@ audio {
 a.podcast-feed-item:nth-child(2n) {
     background-color: #f8fcff;
 }
+
+html {
+    margin-left: calc(100vw - 100%);
+}
