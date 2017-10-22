@@ -3,13 +3,15 @@ import moment from 'moment';
 
 const BASE_URL = 'https://itunes.apple.com';
 
-export { getPodcasts, getPodcastData, getPodcastFeed, getPodcastAudioFile };
+export { getPodcasts, getPodcastData, getPodcastFeed, getEpisodeData };
 
 function getPodcasts() {
-  const url = `${BASE_URL}/us/rss/toppodcasts/limit=100/genre=1310/json`;
-  const cachedPodcasts = JSON.parse(localStorage.getItem('podcastsFeed') || '{"timestamp":0,"entry":[]}');;
+  const url = `${BASE_URL}/us/rss/toppodcasts/limit=100/genre=1310/json`;  
+  
+  let cachedPodcasts;
+  cachedPodcasts = JSON.parse(localStorage.getItem('podcastsFeed') || '{"timestamp":0,"entry":[]}'  );
 
-  if (moment().diff(moment(cachedPodcasts.timestamp), 'days') === 0) {
+  if (cachedPodcasts && moment().diff(moment(cachedPodcasts.timestamp), 'days') === 0) {
     return new Promise((resolve) => {
       resolve(cachedPodcasts.entry)
     })
@@ -56,8 +58,9 @@ function getPodcastFeed(podcastId) {
   const cleanHTML = (tempEl) => getInnerHTML(tempEl)
   .replace(/&amp;/g,"&")
   .replace(/<span[^>]*>(.*?)<\/span[^>]*>/g,"")
-  .replace( /&lt;!\[CDATA\[(.*?)\]\]&gt;/g, '$1');
-
+  .replace( /&lt;!\[CDATA\[(.*?)\]\]&gt;/g, '$1')
+  .replace( /<!--\[CDATA\[(.*?)\]\](-->|&gt;)/g, '$1')
+  
   const getfeedUrl = (feedEl) => {
     const tempEl = feedEl || document.createElement('div');
     return tempEl.getAttribute('url') || tempEl.getAttribute('href') || '';
@@ -79,7 +82,7 @@ function getPodcastFeed(podcastId) {
           const tempDiv = document.createElement('div');
           
           tempDiv.innerHTML = feedData.data;
-          tempDiv.getElementsByTagName('img').forEach(el => el.setAttribute('src',''))
+          Array.from(tempDiv.getElementsByTagName('img')).forEach(el => el.setAttribute('src',''))
 
           const isRSSFeed = !!tempDiv.getElementsByTagName('rss').length
           console.log('isRSSFeed', isRSSFeed)
@@ -97,7 +100,7 @@ function getPodcastFeed(podcastId) {
                 : getFirstChild(element.getElementsByClassName('itemtitle')[0])
               ),
               description: cleanHTML(
-                isRSSFeed ? element.getElementsByTagName('title')[0]
+                isRSSFeed ? element.getElementsByTagName('description')[0]
                 : getFirstChild(element.getElementsByClassName('itemtitle')[0])
               ),
               date: formatDate(
@@ -144,14 +147,9 @@ function getPodcastFeedUrl(podcastId) {
   })
 }
 
-function getPodcastAudioFile(podcastId, episodeId) {
+function getEpisodeData(podcastId, episodeId) {
   return getPodcastFeed(podcastId).then(feed => {
-    const episode = feed.find(episode => {
-      console.log('episode.id == episodeId', Number(episode.id) === Number(episodeId))
-      return Number(episode.id) === Number(episodeId)
-    })
-    console.log('episode', episode.url)
-    return episode.url;
+    return feed.find(episode => Number(episode.id) === Number(episodeId))
   })
 }
 

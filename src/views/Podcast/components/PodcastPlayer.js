@@ -1,33 +1,34 @@
 import React, { Component, PropTypes } from 'react';
-import { getPodcastAudioFile } from '../../../common/itunes-api'
+import { getEpisodeData } from '../../../common/itunes-api'
 
 export default class PodcastPlayer extends Component {
   constructor() {
     super()
     this.state = {
-      audioFile: null, 
+      url: null,
+      description: '' 
     }
   }
 
-  getAudioFile() {
+  componentWillMount() {
     const { podcastId, episodeId } = this.props;
+    window.scrollTo(0, 0);
     
-    getPodcastAudioFile(podcastId,episodeId).then(audioFile => {
-        this.setState({ audioFile });
+    getEpisodeData(podcastId,episodeId).then(episodeData => {
+        this.setState( episodeData );
     });
   }
   
-  componentWillMount() {
-    this.getAudioFile();
-    window.scrollTo(0, 0);
-  }
-  
   render() {
-    const { audioFile } = this.state;
+    const episodeData = this.state;
 
     return (
-        <div className="col-sm-8 podcast__podcast-player">
-          <audio src={audioFile} controls autoplay></audio>
+        <div className="podcast__podcast-player">
+          <div className="podcast-player__description" dangerouslySetInnerHTML={{__html:episodeData.description}}>
+          </div>
+          <audio className="podcast-player__audio" controls autoPlay>
+            <source src={episodeData.url} type="audio/mp3"/>
+          </audio>
         </div>
     );
   }
