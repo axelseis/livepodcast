@@ -16,6 +16,7 @@ export default class PodcastList extends Component {
 
   componentWillMount() {
     this.getPodcasts();
+    window.scrollTo(0, 0);
   }
 
   render() {

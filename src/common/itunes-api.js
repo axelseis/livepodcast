@@ -27,15 +27,18 @@ function getPodcasts() {
 }
 
 function setCachedPodcastData(podcastId,feedUrl,dataId){
-  const cachedPodcasts = JSON.parse(localStorage.getItem('podcastsFeed') || '{"timestamp":0,"entry":[]}');
-  const timestamp = cachedPodcasts.timestamp;
-  const entry = cachedPodcasts.entry;
+  const cachedPodcasts = JSON.parse(localStorage.getItem('podcastsFeed'));
   
-  entry.find(
-    podcast => podcast.id.attributes['im:id'] === podcastId
-  )[dataId] = feedUrl;
-  
-  localStorage.setItem('podcastsFeed', JSON.stringify({ entry, timestamp }));
+  if(cachedPodcasts){
+    const timestamp = cachedPodcasts.timestamp;
+    const entry = cachedPodcasts.entry;
+    
+    entry.find(
+      podcast => podcast.id.attributes['im:id'] === podcastId
+    )[dataId] = feedUrl;
+    
+    localStorage.setItem('podcastsFeed', JSON.stringify({ entry, timestamp }));
+  }
 }
 
 function getPodcastData(podcastId) {
@@ -74,8 +77,10 @@ function getPodcastFeed(podcastId) {
       return getPodcastFeedUrl(podcastId).then(feedUrl => {
         return axios.get(`https://cors-anywhere.herokuapp.com/${feedUrl}`).then(feedData => {
           const tempDiv = document.createElement('div');
+          
           tempDiv.innerHTML = feedData.data;
-    
+          tempDiv.getElementsByTagName('img').forEach(el => el.setAttribute('src',''))
+
           const isRSSFeed = !!tempDiv.getElementsByTagName('rss').length
           console.log('isRSSFeed', isRSSFeed)
           
@@ -83,18 +88,15 @@ function getPodcastFeed(podcastId) {
             isRSSFeed ? tempDiv.getElementsByTagName('item') :
             tempDiv.getElementsByClassName('regularitem')
           )
-          .map(element => {
-            //console.log('element', element)
+          .map((element,index,arr) => {
+            console.log('element', element)
             return ({
-              id: formatDate(
-                isRSSFeed ? element.getElementsByTagName('pubdate')[0]
-                : element.getElementsByClassName('itemposttime')[0]
-              ,'unix'),
+              id: arr.length - index,
               title: cleanHTML(
                 isRSSFeed ? element.getElementsByTagName('title')[0]
                 : getFirstChild(element.getElementsByClassName('itemtitle')[0])
               ),
-              title: cleanHTML(
+              description: cleanHTML(
                 isRSSFeed ? element.getElementsByTagName('title')[0]
                 : getFirstChild(element.getElementsByClassName('itemtitle')[0])
               ),
@@ -145,8 +147,8 @@ function getPodcastFeedUrl(podcastId) {
 function getPodcastAudioFile(podcastId, episodeId) {
   return getPodcastFeed(podcastId).then(feed => {
     const episode = feed.find(episode => {
-      console.log('episode.id == episodeId', episode.id == episodeId)
-      return episode.id*1 == episodeId*1
+      console.log('episode.id == episodeId', Number(episode.id) === Number(episodeId))
+      return Number(episode.id) === Number(episodeId)
     })
     console.log('episode', episode.url)
     return episode.url;

@@ -13,13 +13,13 @@ export default class PodcastPlayer extends Component {
     const { podcastId, episodeId } = this.props;
     
     getPodcastAudioFile(podcastId,episodeId).then(audioFile => {
-      console.log('audioFile', audioFile)
         this.setState({ audioFile });
     });
   }
   
   componentWillMount() {
     this.getAudioFile();
+    window.scrollTo(0, 0);
   }
   
   render() {
@@ -27,7 +27,7 @@ export default class PodcastPlayer extends Component {
 
     return (
         <div className="col-sm-8 podcast__podcast-player">
-          <audio src={audioFile} controls></audio>
+          <audio src={audioFile} controls autoplay></audio>
         </div>
     );
   }

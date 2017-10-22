@@ -106,8 +106,9 @@ img.podcast-card__image {
     width: 100%;
 }
 
-.col-sm-4.podcast__podcast-card {
+.podcast__podcast-card {
     color: black;
+    /* position: fixed; */
 }
 
 a.podcast-card:hover {
@@ -117,4 +118,22 @@ a.podcast-card:hover {
 
 a.podcast-card {
     color: black;
+}
+
+.podcast__podcast-feed {
+	height: 100%;
+	overflow: auto;
+}
+
+html, body, .app, #livepodcast {
+    height: 100%;
+    overflow: hidden;
+}
+
+.livepodcast__app {
+    height: 100%;
+}
+
+.livepodcast__podcast {
+    height: 100%;
 }

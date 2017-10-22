@@ -9,7 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 ReactDOM.render(
     <Router>
-        <div className="livepodcast container">
+        <div className="livepodcast__app container">
             <Route path="/" component={Header} />
             <Route exact path="/" component={Home} />
             <Switch>
@@ -18,5 +18,5 @@ ReactDOM.render(
             </Switch>
         </div>
     </Router>,
-    document.getElementById('container')
+    document.getElementById('livepodcast')
 );
