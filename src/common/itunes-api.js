@@ -10,7 +10,8 @@ export {
   getPodcastData, 
   getPodcastFeed, 
   getEpisodeData,
-  setLoadingHandler
+  setLoadingHandler,
+  setLoadingState
 };
 
 function setLoadingHandler(handler){
@@ -26,6 +27,15 @@ function setLoadingState(state){
   }
 
   _loadingHandler(!!_loadingState.length)
+}
+
+function setPodcastFeedLS(podcastfeedObj){
+  try{
+    localStorage.setItem('podcastsFeed', podcastfeedObj);
+  }
+  catch(err){
+    console.log('error saving localStorage: ', err)
+  }
 }
 
 function getPodcasts() {
@@ -48,9 +58,10 @@ function getPodcasts() {
           const entry = response.data.feed.entry;
           const timestamp = new Date().getTime();
           
-          localStorage.setItem('podcastsFeed', JSON.stringify({ entry, timestamp }));
-          
           setLoadingState(false)
+          setPodcastFeedLS(JSON.stringify({ entry, timestamp }))
+          console.log('entry', entry)
+          
           return entry
         },
         error => {
@@ -73,7 +84,7 @@ function setCachedPodcastData(podcastId,feedUrl,dataId){
       podcast => podcast.id.attributes['im:id'] === podcastId
     )[dataId] = feedUrl;
     
-    localStorage.setItem('podcastsFeed', JSON.stringify({ entry, timestamp }));
+    setPodcastFeedLS(JSON.stringify({ entry, timestamp }));
   }
 }
 
@@ -93,8 +104,8 @@ function getPodcastFeed(podcastId) {
   .replace(/&amp;/g,"&")
   .replace(/&lt;/g,"<")
   .replace(/&gt;/g,">")
-  .replace(/<span[^>]*>(.*?)<\/span[^>]*>/g,"")
-  .replace(/<p[^>]*>(''|&nbsp;)<\/p[^>]*>/g,"")
+  //.replace(/<span[^>]*>(.*?)<\/span[^>]*>/g,"")
+  //.replace(/<p[^>]*>(''|&nbsp;)<\/p[^>]*>/g,"")
   .replace( /<!\[CDATA\[(.*?)\]\]>/g, '$1')
   .replace( /<!--\[CDATA\[(.*?)\]\](-->|>)/g, '$1')
   .replace( /\]\]>/g, '')
@@ -119,9 +130,7 @@ function getPodcastFeed(podcastId) {
       return getPodcastFeedUrl(podcastId).then(feedUrl => {
         return axios.get(`https://cors-anywhere.herokuapp.com/${feedUrl}`).then(feedData => {
           const tempDiv = document.createElement('div');
-          
           tempDiv.innerHTML = feedData.data;
-          //Array.from(tempDiv.getElementsByTagName('img')).forEach(el => el.setAttribute('src',''))
 
           const isRSSFeed = !!tempDiv.getElementsByTagName('rss').length
           
@@ -156,10 +165,9 @@ function getPodcastFeed(podcastId) {
             })
           })
           
-          //console.log('feedElements', feedElements)
-          
+          setLoadingState(false)          
           setCachedPodcastData(podcastId,feedElements,'__feed')
-          setLoadingState(false)
+          
           return feedElements;
         });
       })
@@ -181,7 +189,7 @@ function getPodcastFeedUrl(podcastId) {
         response => {
           const feedUrl = response.data.results[0].feedUrl;
 
-          setCachedPodcastData(podcastId,feedUrl,'')
+          //setCachedPodcastData(podcastId,feedUrl,'')
           setLoadingState(false)          
 
           return feedUrl;

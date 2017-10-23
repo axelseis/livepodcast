@@ -1,12 +1,6 @@
 
 
 
-@media screen and (min-width: 991px) {
-    .podcast__podcast-card {
-        max-width: 280px !important;
-    }
-}
-
 body {
 	color: rgb(0, 0, 0);
 }
@@ -67,8 +61,9 @@ body {
 img.podcast-card__image {
     width: 100%;
     background-color: #acd0b7;
-    max-width: 200px;
+    /* max-width: 200px; */
     border-radius: 10px;
+    /* margin-bottom: 20px; */
 }
 
 .podcast-feed__item title {
@@ -113,16 +108,15 @@ img.podcast-card__image {
     width: 100%;
 }
 
-a.podcast-card:hover {
-    color: black;
-    text-decoration: none;
-}
-
-a.podcast-card {
-    color: #212529;
+.podcast-card {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.podcast-card__card {
+    display: flex;
+    flex-direction: column;
 }
 
 audio.podcast-player__audio {
@@ -167,17 +161,21 @@ audio {
 }
 
 .podcast-card__info {
-    margin-top: 30px;
-    max-width: 100%;
+    margin-top: 20px;
 }
 
 .podcast-card__name {
     font-weight: bold;
+    color: black;
+    display: block;
+    /* width: 100%; */
 }
 
 
 .podcast-card__artist {
     font-style: italic;
+    color: black;
+    display: block;
 }
 
 .podcast-card__description {
@@ -208,41 +206,6 @@ audio {
 }
 
 
-
-/* SPINNER */
-.header__loading {
-    width: 25px;
-    height: 25px;
-    position: absolute;
-    right: 0;
-    top: 3px;
-    background-color: #c1dcf9;
-    border-radius: 50%;
-    opacity: 0;
-    transition: 0.4s opacity;
-}
-  
-.livepodcast__header[loading="true"] .header__loading {
-    -webkit-animation: sk-bounce 1.0s infinite ease-in-out;
-    animation: sk-bounce 1.0s infinite ease-in-out;
-	opacity: 1;
-}
-  
-  
-@-webkit-keyframes sk-bounce {
-    0%, 100% { -webkit-transform: scale(0.0) }
-    50% { -webkit-transform: scale(1.0) }
-}
-
-@keyframes sk-bounce {
-    0%, 100% { 
-        transform: scale(0.0);
-        -webkit-transform: scale(0.0);
-    } 50% { 
-        transform: scale(1.0);
-        -webkit-transform: scale(1.0);
-    }
-}
 
 .home__podcast-filter {
     width: 40%;
@@ -288,4 +251,41 @@ a.podcast-feed-item:nth-child(2n) {
 
 html {
     margin-left: calc(100vw - 100%);
+}
+
+a.podcast-card__name:hover {
+    text-decoration: none;
+}
+
+a.podcast-card__artist:hover {
+    text-decoration: none;
+}
+
+.header__title {
+    margin-left: 5px;
+}
+
+
+
+@media screen and (min-width: 991px) {
+    .podcast__podcast-card {
+        max-width: 280px !important;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .podcast-card__card {
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        justify-content: flex-start;
+    }
+    .podcast-card__info {
+		margin-left: 10px;
+    }
+}
+
+
+.podcast-card__image {
+    display: block;
 }

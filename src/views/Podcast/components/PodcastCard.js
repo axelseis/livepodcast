@@ -6,7 +6,7 @@ export default class PodcastCard extends Component {
   constructor() {
     super()
     this.state = {
-      data: null, 
+      data: null,
       defaultData: {
         'im:image': [
           {
@@ -20,15 +20,15 @@ export default class PodcastCard extends Component {
       }
     }
   }
-  
+
   getData() {
     const { podcastId } = this.props;
-    
+
     getPodcastData(podcastId).then(data => {
       const tempData = data || this.defaultData;
-        this.setState({ 'data' : tempData });
-        window.scrollTo(0, 0);
-      });
+      this.setState({ 'data': tempData });
+      window.scrollTo(0, 0);
+    });
   }
 
   componentWillMount() {
@@ -40,25 +40,29 @@ export default class PodcastCard extends Component {
     const data = this.state.data || this.state.defaultData;
 
     return (
-      <Link className="podcast-card" to={`/podcast/${podcastId}`}>
-        <img className="podcast-card__image"
-          src={data['im:image'].find(image => {
-            return image.attributes.height === '170'
-          }).label}
-        />
-        <div className="podcast-card__info">
-          <div className="podcast-card__name">
-            {data['im:name'].label}
-          </div>
-          <div className="podcast-card__artist">
-            by {data['im:artist'].label}
-          </div>
-          <div className="podcast-card__description">
-            <b>Description:</b><br/>
-            {(data.summary||{'label': 'no description'}).label}
+      <div className="podcast-card" >
+        <div className="podcast-card__card">
+          <Link className="podcast-card__image" to={`/podcast/${podcastId}`}>
+            <img className="podcast-card__image"
+              src={data['im:image'].find(image => {
+                return image.attributes.height === '170'
+              }).label}
+            />
+          </Link>
+          <div className="podcast-card__info">
+            <Link className="podcast-card__name" to={`/podcast/${podcastId}`}>
+              {data['im:name'].label}
+            </Link>
+            <Link className="podcast-card__artist" to={`/podcast/${podcastId}`}>
+              by {data['im:artist'].label}
+            </Link>
           </div>
         </div>
-      </Link>
+        <div className="podcast-card__description">
+          <b>Description:</b><br />
+          {(data.summary || { 'label': 'no description' }).label}
+        </div>
+      </div>
     );
   }
 }
