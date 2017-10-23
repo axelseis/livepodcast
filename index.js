@@ -13,7 +13,7 @@ const onInitLoad = (ev) => {
 
 ReactDOM.render(
     <Router>
-        <div className="livepodcast__app container">
+        <div className="livepodcast__app container-fluid">
             <Route path="/" onInitLoad={onInitLoad} component={Header} />
             <Route exact path="/" component={Home} />
             <Switch>

@@ -56,11 +56,11 @@ export default class PodcastCard extends Component {
             <Link className="podcast-card__artist" to={`/podcast/${podcastId}`}>
               by {data['im:artist'].label}
             </Link>
+            <div className="podcast-card__description">
+              <b>Description:</b><br />
+              {(data.summary || { 'label': 'no description' }).label}
+            </div>
           </div>
-        </div>
-        <div className="podcast-card__description">
-          <b>Description:</b><br />
-          {(data.summary || { 'label': 'no description' }).label}
         </div>
       </div>
     );
