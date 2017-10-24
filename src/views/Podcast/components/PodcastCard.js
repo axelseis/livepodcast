@@ -6,19 +6,21 @@ import { Link } from 'react-router-dom';
 export default class PodcastCard extends Component {
   constructor() {
     super()
+
+    this.defaultData = {
+      'im:image': [
+        {
+          'label': '../../src/assets/default-placeholder-300x300.png',
+          'attributes': { 'height': '170' }
+        }
+      ],
+      'im:name': { 'label': 'no name' },
+      'im:artist': { 'label': 'unknown' },
+      'summary': { 'label': 'no description' }
+    }
+    
     this.state = {
-      data: null,
-      defaultData: {
-        'im:image': [
-          {
-            'label': '../../src/assets/default-placeholder-300x300.png',
-            'attributes': { 'height': '170' }
-          }
-        ],
-        'im:name': { 'label': 'no name' },
-        'im:artist': { 'label': 'unknown' },
-        'summary': { 'label': 'no description' }
-      }
+      data: null
     }
   }
 
@@ -38,7 +40,7 @@ export default class PodcastCard extends Component {
 
   render() {
     const { podcastId } = this.props;
-    const data = this.state.data || this.state.defaultData;
+    const data = this.state.data || this.defaultData;
 
     return (
       <div className="podcast-card" >

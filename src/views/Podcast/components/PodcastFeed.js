@@ -42,7 +42,11 @@ export default class PodcastFeed extends Component {
           </div>
           {
             feedElements.map((element, index) =>
-              <PodcastFeedItem key={index} element={element} podcastId={podcastId} />
+              <PodcastFeedItem 
+                key={index} 
+                element={element} 
+                podcastId={podcastId}
+              />
             )
           }
         </div>
