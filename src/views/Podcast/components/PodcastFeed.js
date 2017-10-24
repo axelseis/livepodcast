@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Proptypes from 'prop-types';
 import { getPodcastFeed } from '../../../common/itunes-api'
 import PodcastFeedItem from './PodcastFeedItem';
 
@@ -48,4 +49,8 @@ export default class PodcastFeed extends Component {
       </div>
     );
   }
+}
+
+PodcastFeed.propTypes = {
+  podcastId: Proptypes.number,
 }

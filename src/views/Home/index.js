@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import Proptypes from 'prop-types';
 import PodcastFilter from './components/PodcastFilter'
 import PodcastList from './components/PodcastList'
 
@@ -34,4 +35,9 @@ export default class Home extends Component {
       </div>
     );
   }
+}
+
+Home.propTypes = {
+  podcastNumber: Proptypes.number,
+  filter: Proptypes.string
 }

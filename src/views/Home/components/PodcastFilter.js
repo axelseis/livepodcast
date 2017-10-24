@@ -1,5 +1,5 @@
-import React, {Component, PropTypes} from 'react';
-
+import React, {Component} from 'react';
+import Proptypes from 'prop-types';
 export default class PodcastFilter extends Component {
   
   render() {
@@ -17,4 +17,9 @@ export default class PodcastFilter extends Component {
       </h4>
     );
   }
+}
+
+PodcastFilter.propTypes = {
+  number: Proptypes.number,
+  onUpdate: Proptypes.func
 }

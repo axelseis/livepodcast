@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Proptypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 export default class PodcastFeedItem extends Component {
@@ -19,4 +20,9 @@ export default class PodcastFeedItem extends Component {
       </Link>
     );
   }
+}
+
+PodcastFeedItem.propTypes = {
+  podcastId: Proptypes.number,
+  element: Proptypes.object,
 }

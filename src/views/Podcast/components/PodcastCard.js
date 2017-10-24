@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Proptypes from 'prop-types';
 import { getPodcastData } from '../../../common/itunes-api'
 import { Link } from 'react-router-dom';
 
@@ -43,7 +44,9 @@ export default class PodcastCard extends Component {
       <div className="podcast-card" >
         <div className="podcast-card__card">
           <Link className="podcast-card__image" to={`/podcast/${podcastId}`}>
-            <img className="podcast-card__image"
+            <img
+              alt="" 
+              className="podcast-card__image"
               src={data['im:image'].find(image => {
                 return image.attributes.height === '170'
               }).label}
@@ -65,4 +68,9 @@ export default class PodcastCard extends Component {
       </div>
     );
   }
+}
+
+PodcastCard.propTypes = {
+  podcastId: Proptypes.number,
+  episodeId: Proptypes.number,
 }

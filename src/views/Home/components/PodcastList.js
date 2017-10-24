@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import Proptypes from 'prop-types';
 import PodcastListItem from './PodcastListItem';
 import { getPodcasts } from '../../../common/itunes-api'
 
@@ -60,4 +61,9 @@ function renderPodcasts(podcasts, filter) {
         (pArtist && pArtist.toLowerCase().includes(filter))
     })
     .map(podcast => <PodcastListItem key={podcast.id.attributes["im:id"]} podcast={podcast} />);
+}
+
+PodcastList.propTypes = {
+  filter: Proptypes.string,
+  onUpdate: Proptypes.func
 }

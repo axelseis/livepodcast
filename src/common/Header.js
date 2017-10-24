@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Proptypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { setLoadingHandler } from './itunes-api.js';
 
@@ -23,11 +24,15 @@ export default class Header extends Component {
 
     return (
       <div className="row livepodcast__header" loading={loading.toString()}>
-        <div className="header__loading header__loading--cssload"></div>
+        <div className="header__loading header__loading--cssload" />
         <Link className="header__title" to="/">
           <h3>Podcaster</h3>
         </Link>
       </div>
     );
   }
+}
+
+Header.propTypes = {
+  loading: Proptypes.bool
 }

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import Proptypes from 'prop-types';
 import { getEpisodeData, setLoadingState } from '../../../common/itunes-api'
 
 export default class PodcastPlayer extends Component {
@@ -20,7 +21,7 @@ export default class PodcastPlayer extends Component {
     });
   }
 
-  onCanPlayAudio(ev){
+  onCanPlayAudio(){
     setLoadingState(false)
   }
 
@@ -43,12 +44,24 @@ export default class PodcastPlayer extends Component {
         <h4 className="podcast-player__title">
           {episodeData.title}
         </h4>
-        <div className="podcast-player__description"
-          dangerouslySetInnerHTML={{ __html: episodeData.description }}>
-        </div>
-        <audio onCanPlay={onCanPlayBind} onError={onErrorBind} className="podcast-player__audio" src={episodeData.url} controls autoPlay>
-        </audio>
+        <div 
+          className="podcast-player__description" 
+          dangerouslySetInnerHTML={{ __html: episodeData.description }} 
+        />
+        <audio 
+          className="podcast-player__audio"
+          onCanPlay={onCanPlayBind}
+          onError={onErrorBind}
+          src={episodeData.url}
+          controls
+          autoPlay 
+        />
       </div>
     );
   }
+}
+
+PodcastPlayer.propTypes = {
+  podcastId: Proptypes.number,
+  episodeId: Proptypes.number,
 }
