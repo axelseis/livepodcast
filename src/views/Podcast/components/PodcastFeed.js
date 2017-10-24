@@ -52,5 +52,5 @@ export default class PodcastFeed extends Component {
 }
 
 PodcastFeed.propTypes = {
-  podcastId: Proptypes.number,
+  podcastId: Proptypes.string,
 }

@@ -23,6 +23,6 @@ export default class PodcastFeedItem extends Component {
 }
 
 PodcastFeedItem.propTypes = {
-  podcastId: Proptypes.number,
+  podcastId: Proptypes.string,
   element: Proptypes.object,
 }

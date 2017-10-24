@@ -25,7 +25,6 @@ export default class Home extends Component {
 
     return (
       <div className="livepodcast__home">
-
         <div className="home__podcast-filter">
           <PodcastFilter number={podcastNumber} onUpdate={this.onUpdatePodcastFilter} />
         </div>

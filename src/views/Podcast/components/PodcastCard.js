@@ -71,6 +71,6 @@ export default class PodcastCard extends Component {
 }
 
 PodcastCard.propTypes = {
-  podcastId: Proptypes.number,
+  podcastId: Proptypes.string,
   episodeId: Proptypes.number,
 }
