@@ -39,7 +39,7 @@ function setPodcastFeedLS(podcastfeedObj) {
 
 function getPodcasts() {
     const url = `${BASE_URL}/us/rss/toppodcasts/limit=100/genre=1310/json`;
-    const cachedPodcasts = JSON.parse(localStorage.getItem('podcastsFeed') || '{"timestamp":0,"entry":[]}');
+    const cachedPodcasts = ''//JSON.parse(localStorage.getItem('podcastsFeed') || '{"timestamp":0,"entry":[]}');
 
     if (cachedPodcasts && moment().diff(moment(cachedPodcasts.timestamp), 'days') === 0) {
         return new Promise((resolve) => {
@@ -118,7 +118,7 @@ function getPodcastFeed(podcastId) {
     };
 
     const formatDuration = (dateParam) => {
-        const dateStr = dateParam && dateParam.innerHTML ? dateParam.innerHTML : '';
+        const dateStr = dateParam && dateParam.innerHTML ? dateParam.innerHTML : '-';
         const pmom = moment.unix(dateStr);
         return pmom.isValid() ? pmom.format('mm:ss') : dateStr;    
     }
