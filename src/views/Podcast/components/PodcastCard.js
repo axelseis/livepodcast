@@ -41,17 +41,18 @@ export default class PodcastCard extends Component {
   render() {
     const { podcastId } = this.props;
     const data = this.state.data || this.defaultData;
+    const imageSrc = data['im:image'].find(image => {
+      return image.attributes.height === '170'
+    }).label;
 
     return (
       <div className="podcast-card" >
         <div className="podcast-card__card">
           <Link className="podcast-card__image" to={`/podcast/${podcastId}`}>
             <img
-              alt="" 
               className="podcast-card__image"
-              src={data['im:image'].find(image => {
-                return image.attributes.height === '170'
-              }).label}
+              src={imageSrc} 
+              alt="podcast image"
             />
           </Link>
           <div className="podcast-card__info">

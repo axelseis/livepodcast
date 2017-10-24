@@ -19,24 +19,23 @@ function setLoadingHandler(handler) {
 }
 
 function setLoadingState(state) {
-    if (state) {
-        _loadingState.push(state);
-    }
-    else {
-        _loadingState.pop();
-    }
+    state ? (
+        _loadingState.push(state)
+    ) : (
+        _loadingState.pop()
+    );
 
-    _loadingHandler(!!_loadingState.length)
-}
+    _loadingHandler(!!_loadingState.length);
+};
 
 function setPodcastFeedLS(podcastfeedObj) {
     try {
-        localStorage.setItem('podcastsFeed', podcastfeedObj);
+        localStorage.setItem('podcastsFeed', podcastfeedObj)
     }
     catch (err) {
         console.log('error saving localStorage: ', err)
     }
-}
+};
 
 function getPodcasts() {
     const url = `${BASE_URL}/us/rss/toppodcasts/limit=100/genre=1310/json`;
@@ -61,7 +60,6 @@ function getPodcasts() {
                         entry,
                         timestamp
                     }))
-                    console.log('entry', entry)
 
                     return entry
                 },
@@ -108,18 +106,27 @@ function getPodcastFeed(podcastId) {
         .replace(/&amp;/g, "&")
         .replace(/&lt;/g, "<")
         .replace(/&gt;/g, ">")
+        .replace(/<img[^>]*>/g,"")
         .replace(/<!\[CDATA\[(.*?)\]\]>/g, '$1')
         .replace(/<!--\[CDATA\[(.*?)\]\](-->|>)/g, '$1')
         .replace(/\]\]>/g, '')
 
+    
     const getfeedUrl = (feedEl) => {
         const tempEl = feedEl || document.createElement('div');
         return tempEl.getAttribute('url') || tempEl.getAttribute('href') || '';
     };
 
-    const formatDate = (dateStr, format) => {
-        const momDate = moment(getInnerHTML(dateStr))
-        return momDate.isValid() ? format === 'unix' ? momDate.unix() : momDate.format(format) : '-';
+    const formatDuration = (dateParam) => {
+        const dateStr = dateParam && dateParam.innerHTML ? dateParam.innerHTML : '';
+        const pmom = moment.unix(dateStr);
+        return pmom.isValid() ? pmom.format('mm:ss') : dateStr;    
+    }
+
+    const formatDate = (dateStr) => {
+        const format = 'DD/MM/YYYY';
+        const momDate = moment(getInnerHTML(dateStr).replace(/<span>(.*?)<\/span>/g, ''))
+        return momDate.isValid() ? momDate.format(format) : '-';    
     }
 
     return getPodcastData(podcastId).then(podcastData => {
@@ -132,7 +139,7 @@ function getPodcastFeed(podcastId) {
             return getPodcastFeedUrl(podcastId).then(feedUrl => {
                 return axios.get(`https://cors-anywhere.herokuapp.com/${feedUrl}`).then(feedData => {
                     const tempDiv = document.createElement('div');
-                    tempDiv.innerHTML = feedData.data;
+                    tempDiv.innerHTML = cleanHTML(feedData.data);
 
                     const isRSSFeed = !!tempDiv.getElementsByTagName('rss').length
 
@@ -154,10 +161,12 @@ function getPodcastFeed(podcastId) {
                                 ),
                                 date: formatDate(
                                     isRSSFeed ? element.getElementsByTagName('pubdate')[0] :
-                                    element.getElementsByClassName('itemposttime')[0], 'DD/MM/YYYY'),
-                                duration: formatDate(
-                                    isRSSFeed ? element.getElementsByTagName('itunes:duration')[0] :
-                                    '-', 'HH:MM:SS'),
+                                    element.getElementsByClassName('itemposttime')[0]
+                                ),
+                                duration: ( isRSSFeed ? 
+                                    formatDuration(element.getElementsByTagName('itunes:duration')[0]) :
+                                    '-'
+                                ),
                                 url: cleanHTML(getfeedUrl(
                                     isRSSFeed ? element.getElementsByTagName('enclosure')[0] :
                                     getFirstChild(element.getElementsByClassName('podcastmediaenclosure')[0])
