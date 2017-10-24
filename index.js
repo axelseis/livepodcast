@@ -7,14 +7,10 @@ import Podcast from './src/views/Podcast';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const onInitLoad = (ev) => {
-    console.log('ev', ev)
-}
-
 ReactDOM.render(
     <Router>
         <div className="livepodcast__app container-fluid">
-            <Route path="/" onInitLoad={onInitLoad} component={Header} />
+            <Route path="/" component={Header} />
             <Route exact path="/" component={Home} />
             <Switch>
                 <Route path="/podcast/:podcastId/episode/:episodeId" component={Podcast} />

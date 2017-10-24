@@ -2,6 +2,7 @@ const {resolve} = require('path');
 const webpack = require('webpack');
 const validate = require('webpack-validator');
 const {getIfUtils, removeEmpty} = require('webpack-config-utils');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = env => {
   const {ifProd, ifNotProd} = getIfUtils(env)
@@ -28,6 +29,8 @@ module.exports = env => {
       ],
     },
     plugins: removeEmpty([
+      new BundleAnalyzerPlugin(),
+      new webpack.IgnorePlugin(/^\.\/locale$/, [/moment$/]),
       ifProd(new webpack.optimize.DedupePlugin()),
       ifProd(new webpack.LoaderOptionsPlugin({
         minimize: true,
