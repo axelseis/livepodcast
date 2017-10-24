@@ -63,5 +63,5 @@ export default class PodcastPlayer extends Component {
 
 PodcastPlayer.propTypes = {
   podcastId: Proptypes.string,
-  episodeId: Proptypes.number,
+  episodeId: Proptypes.string,
 }
