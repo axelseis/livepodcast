@@ -39,7 +39,7 @@ function setPodcastFeedLS(podcastfeedObj) {
 
 function getPodcasts() {
     const url = `${BASE_URL}/us/rss/toppodcasts/limit=100/genre=1310/json`;
-    const cachedPodcasts = JSON.parse(localStorage.getItem('podcastsFeed') || '{"timestamp":0,"entry":[]}');
+    const cachedPodcasts = ''//JSON.parse(localStorage.getItem('podcastsFeed') || '{"timestamp":0,"entry":[]}');
 
     if (cachedPodcasts && moment().diff(moment(cachedPodcasts.timestamp), 'days') === 0) {
         return new Promise((resolve) => {
@@ -169,7 +169,8 @@ function getPodcastFeed(podcastId) {
                                 ),
                                 url: cleanHTML(getfeedUrl(
                                     isRSSFeed ? element.getElementsByTagName('enclosure')[0] :
-                                    getFirstChild(element.getElementsByClassName('podcastmediaenclosure')[0])
+                                    getFirstChild(element.getElementsByClassName('podcastmediaenclosure')[0]
+                                                || element.getElementsByClassName('mediaenclosure')[0])
                                 ))
                             })
                         })
